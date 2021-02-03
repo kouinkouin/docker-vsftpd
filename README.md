@@ -151,3 +151,6 @@ docker run -d -v /my/data/directory:/home/vsftpd \
 --name vsftpd --restart=always fauria/vsftpd
 ```
 
+
+
+https://security.appspot.com/vsftpd/vsftpd_conf.html

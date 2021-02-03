@@ -1,6 +1,6 @@
 FROM centos:7
 
-ARG USER_ID=14
+ARG USER_ID=1001
 ARG GROUP_ID=50
 
 MAINTAINER Fer Uria <fauria@gmail.com>
@@ -14,6 +14,8 @@ RUN yum install -y \
 	vsftpd \
 	db4-utils \
 	db4 \
+	python3 \
+	openssl \
 	iproute && yum clean all
 
 RUN usermod -u ${USER_ID} ftp
@@ -31,13 +33,17 @@ ENV REVERSE_LOOKUP_ENABLE YES
 ENV PASV_PROMISCUOUS NO
 ENV PORT_PROMISCUOUS NO
 
-COPY vsftpd.conf /etc/vsftpd/
+COPY substitute.py /usr/sbin/
 COPY vsftpd_virtual /etc/pam.d/
 COPY run-vsftpd.sh /usr/sbin/
+COPY vsftpd.conf /etc/vsftpd/vsftpd.conf.tmp
 
 RUN chmod +x /usr/sbin/run-vsftpd.sh
+RUN chmod +x /usr/sbin/substitute.py
 RUN mkdir -p /home/vsftpd/
 RUN chown -R ftp:ftp /home/vsftpd/
+RUN mkdir -p /usr/certs
+RUN chmod og+xr /usr/certs
 
 VOLUME /home/vsftpd
 VOLUME /var/log/vsftpd
