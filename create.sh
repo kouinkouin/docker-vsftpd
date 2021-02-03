@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPO=vsftpd
-VERSION=1.1.0
+VERSION=1.1.1
 
 if [  ! -f Dockerfile ]; then
   echo "not a docker configuration"

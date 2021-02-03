@@ -1,6 +1,6 @@
 FROM centos:7
 
-ARG USER_ID=1001
+ARG USER_ID=501
 ARG GROUP_ID=50
 
 MAINTAINER Fer Uria <fauria@gmail.com>
