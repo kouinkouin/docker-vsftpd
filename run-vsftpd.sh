@@ -14,10 +14,20 @@ for name in $USERS; do
 	# Create home dir and update vsftpd user db:
 	echo "--- Create user ${name} in /home/vsftpd/${name}"
 	mkdir -p "/home/vsftpd/${name}"
+	echo "--- Adding ${name}:${!p} in /etc/vsftpd/virtual_users.txt"
 	echo -e "${name}\n${!p}" >> /etc/vsftpd/virtual_users.txt
 done
+for credential in $CREDENTIALS; do
+	name=$(echo "$credential" | cut -d: -f1)
+	p=$(echo "$credential" | cut -d: -f2)
+	# Create home dir and update vsftpd user db:
+	echo "--- Create user ${name} in /home/vsftpd/${name}"
+	mkdir -p "/home/vsftpd/${name}"
+	echo "--- Adding ${name}:${p} in /etc/vsftpd/virtual_users.txt"
+	echo -e "${name}\n${p}" >> /etc/vsftpd/virtual_users.txt
+done
 
-chown -R ftp:ftp /home/vsftpd/
+chown ftp:ftp /home/vsftpd/*
 /usr/bin/db_load -T -t hash -f /etc/vsftpd/virtual_users.txt /etc/vsftpd/virtual_users.db
 echo "<<< Done"
 
@@ -48,3 +58,4 @@ function byebye {
 }
 trap 'byebye' SIGTERM
 tail -f /var/log/vsftpd.log & wait ${!}
+
